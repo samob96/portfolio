@@ -17,9 +17,9 @@
     {"id": "14", "subject": "Task 13: Add .gitignore, README.md, .env.example", "status": "completed", "blockedBy": ["6"]},
     {"id": "15", "subject": "Task 14: Add vercel.json", "status": "completed", "blockedBy": ["1"]},
     {"id": "16", "subject": "Task 15: Create GitHub repo and push", "status": "completed", "blockedBy": ["1"]},
-    {"id": "17", "subject": "Task 16: Deploy to Vercel", "status": "pending", "blockedBy": ["10", "11", "12", "13", "14", "15"]},
+    {"id": "17", "subject": "Task 16: Deploy to Vercel", "status": "completed", "blockedBy": ["10", "11", "12", "13", "14", "15"]},
     {"id": "18", "subject": "Task 17: Point custom domain at Vercel", "status": "pending", "blockedBy": ["16"]},
-    {"id": "19", "subject": "Task 18: Pick featured projects and publish lineup", "status": "pending", "blockedBy": ["8", "16"]}
+    {"id": "19", "subject": "Task 18: Pick featured projects and publish lineup", "status": "completed", "blockedBy": ["8", "16"]}
   ],
-  "lastUpdated": "2026-04-17T23:47:00-07:00"
+  "lastUpdated": "2026-04-18T11:53:00-07:00"
 }
