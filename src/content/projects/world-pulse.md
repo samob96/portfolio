@@ -1,8 +1,8 @@
 ---
 title: "World Pulse"
 description: "Global news sentiment and trend dashboard."
-status: "live"
+status: "dev"
 featured: false
 order: 20
-published: false
+published: true
 ---

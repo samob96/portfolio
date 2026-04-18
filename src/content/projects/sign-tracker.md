@@ -2,8 +2,8 @@
 title: "Sign Tracker"
 description: "iOS app for tracking and organizing sign language vocabulary."
 tech: ["SwiftUI"]
-status: "testflight"
+status: "dev"
 featured: false
 order: 70
-published: false
+published: true
 ---
