@@ -1,0 +1,45 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, description, tech, status, url, testflight, github, featured } = project.data;
+
+// Card links to detail page if featured, else to external URL/TestFlight/GitHub.
+const primaryHref = featured
+  ? `/projects/${project.id}`
+  : url ?? testflight ?? github ?? `/projects/${project.id}`;
+
+const external = !featured && !!(url || testflight || github);
+
+const statusLabel = {
+  live: 'Live',
+  testflight: 'TestFlight',
+  internal: 'Internal',
+  dev: 'In Development',
+}[status];
+---
+<a
+  href={primaryHref}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener noreferrer' : undefined}
+  class="block border border-paper-border rounded-md px-5 py-5 bg-paper-raised hover:border-ink transition-colors group"
+>
+  <div class="flex items-baseline justify-between gap-4">
+    <h3 class="text-base font-medium tracking-tight group-hover:text-accent transition-colors">
+      {title}
+    </h3>
+    <span class="text-xs font-mono text-ink-subtle whitespace-nowrap">{statusLabel}</span>
+  </div>
+  <p class="mt-2 text-sm text-ink-muted leading-relaxed">{description}</p>
+  {tech.length > 0 && (
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {tech.map((t) => (
+        <li class="text-xs font-mono text-ink-subtle">{t}</li>
+      ))}
+    </ul>
+  )}
+</a>
