@@ -1,0 +1,25 @@
+{
+  "planPath": "docs/plans/2026-04-17-portfolio-site.md",
+  "tasks": [
+    {"id": "1", "subject": "Task 0: Verify Node + npm prereqs", "status": "pending"},
+    {"id": "2", "subject": "Task 1: Scaffold Astro project", "status": "pending", "blockedBy": ["1"]},
+    {"id": "3", "subject": "Task 2: Add Tailwind CSS integration", "status": "pending", "blockedBy": ["2"]},
+    {"id": "4", "subject": "Task 3: Add MDX + content collection schema", "status": "pending", "blockedBy": ["3"]},
+    {"id": "5", "subject": "Task 4: Configure Tailwind theme tokens", "status": "pending", "blockedBy": ["3"]},
+    {"id": "6", "subject": "Task 5: Add Fonts component", "status": "pending", "blockedBy": ["3"]},
+    {"id": "7", "subject": "Task 6: Build BaseLayout with nav + footer", "status": "pending", "blockedBy": ["5"]},
+    {"id": "8", "subject": "Task 7: Build ProjectCard component", "status": "pending", "blockedBy": ["6"]},
+    {"id": "9", "subject": "Task 8: Seed 9 project Markdown files", "status": "pending", "blockedBy": ["7"]},
+    {"id": "10", "subject": "Task 9: Build /projects listing page", "status": "pending", "blockedBy": ["4"]},
+    {"id": "11", "subject": "Task 10: Build project detail template", "status": "pending", "blockedBy": ["7", "9"]},
+    {"id": "12", "subject": "Task 11: Build home page", "status": "pending", "blockedBy": ["7", "9"]},
+    {"id": "13", "subject": "Task 12: Build /about page", "status": "pending", "blockedBy": ["7", "9", "11"]},
+    {"id": "14", "subject": "Task 13: Add .gitignore, README.md, .env.example", "status": "pending", "blockedBy": ["6"]},
+    {"id": "15", "subject": "Task 14: Add vercel.json", "status": "pending", "blockedBy": ["1"]},
+    {"id": "16", "subject": "Task 15: Create GitHub repo and push", "status": "pending", "blockedBy": ["1"]},
+    {"id": "17", "subject": "Task 16: Deploy to Vercel", "status": "pending", "blockedBy": ["10", "11", "12", "13", "14", "15"]},
+    {"id": "18", "subject": "Task 17: Point custom domain at Vercel", "status": "pending", "blockedBy": ["16"]},
+    {"id": "19", "subject": "Task 18: Pick featured projects and publish lineup", "status": "pending", "blockedBy": ["8", "16"]}
+  ],
+  "lastUpdated": "2026-04-17T23:25:00-07:00"
+}
