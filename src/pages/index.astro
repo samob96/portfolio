@@ -1,17 +1,50 @@
 ---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
 
+const featured = (await getCollection('projects', ({ data }) => data.published && data.featured))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 2);
 ---
+<BaseLayout title="Sam Mobley" description="Developer. Building small, useful things.">
+  <section class="mb-20">
+    <h1 class="text-3xl font-semibold tracking-tight mb-4">Hi, I'm Sam.</h1>
+    <p class="text-ink-muted text-lg leading-relaxed max-w-xl">
+      I build small, useful software — web tools, iOS apps, and the occasional trading experiment.
+      Most of what I make starts as a personal itch; sometimes they turn into things worth sharing.
+    </p>
+  </section>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+  {featured.length > 0 && (
+    <section class="mb-20">
+      <div class="flex items-baseline justify-between mb-6">
+        <h2 class="text-lg font-medium tracking-tight">Featured</h2>
+        <a href="/projects" class="text-sm text-ink-muted hover:text-ink">All projects →</a>
+      </div>
+      <ul class="grid gap-4">
+        {featured.map((project) => (
+          <li>
+            <ProjectCard project={project} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <section>
+    <h2 class="text-lg font-medium tracking-tight mb-4">Elsewhere</h2>
+    <ul class="space-y-2 text-sm">
+      <li>
+        <a href="https://medium.com/@sammobley" target="_blank" rel="noopener noreferrer" class="text-ink-muted hover:text-ink">
+          Writing on Medium →
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/sammobley" target="_blank" rel="noopener noreferrer" class="text-ink-muted hover:text-ink">
+          Code on GitHub →
+        </a>
+      </li>
+    </ul>
+  </section>
+</BaseLayout>
