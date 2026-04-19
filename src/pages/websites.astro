@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const websites = (await getCollection('projects', ({ data }) => data.published && data.kind === 'website'))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout title="Websites — Sam Mobley" description="Web apps and sites, live on the open web." active="websites">
+  <main class="page">
+    <div class="page-head-v2">
+      <div class="page-head-kicker">
+        <a href="/">← Home</a>
+        <span>· Websites</span>
+      </div>
+      <h1 class="page-head-title">Websites.</h1>
+      <p class="page-head-sub">{websites.length} live on the open web.</p>
+    </div>
+
+    {websites.length > 0 ? (
+      <div class="project-grid">
+        {websites.map((p) => <ProjectCard project={p} />)}
+      </div>
+    ) : (
+      <div class="writing-placeholder">
+        <h3>Nothing here yet.</h3>
+        <p>Web projects will land here as they go live.</p>
+      </div>
+    )}
+  </main>
+</BaseLayout>

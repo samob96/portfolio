@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const apps = (await getCollection('projects', ({ data }) => data.published && data.kind === 'app'))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout title="Apps — Sam Mobley" description="iOS apps I've shipped or am actively working on." active="apps">
+  <main class="page">
+    <div class="page-head-v2">
+      <div class="page-head-kicker">
+        <a href="/">← Home</a>
+        <span>· Apps</span>
+      </div>
+      <h1 class="page-head-title">Apps.</h1>
+      <p class="page-head-sub">{apps.length} shipped or in flight.</p>
+    </div>
+
+    {apps.length > 0 ? (
+      <div class="project-grid">
+        {apps.map((p) => <ProjectCard project={p} />)}
+      </div>
+    ) : (
+      <div class="writing-placeholder">
+        <h3>Nothing here yet.</h3>
+        <p>The first apps will land here soon.</p>
+      </div>
+    )}
+  </main>
+</BaseLayout>

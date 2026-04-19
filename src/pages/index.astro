@@ -1,50 +1,137 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
 
-const featured = (await getCollection('projects', ({ data }) => data.published && data.featured))
-  .sort((a, b) => a.data.order - b.data.order)
-  .slice(0, 2);
+const published = (filter: (d: any) => boolean) =>
+  (col: any[]) => col.filter(({ data }) => data.published && filter(data));
+
+const allProjects = await getCollection('projects', ({ data }) => data.published);
+const allBusinesses = await getCollection('businesses', ({ data }) => data.published);
+const allArticles = await getCollection('articles', ({ data }) => data.published);
+
+const apps = allProjects.filter((p) => p.data.kind === 'app').sort((a, b) => a.data.order - b.data.order);
+const websites = allProjects.filter((p) => p.data.kind === 'website').sort((a, b) => a.data.order - b.data.order);
+const businesses = allBusinesses.sort((a, b) => a.data.order - b.data.order);
+const articles = allArticles.sort((a, b) => a.data.order - b.data.order);
+
+const featuredApp = apps.find((p) => p.data.featured) ?? apps[0];
+const featuredSite = websites.find((p) => p.data.featured) ?? websites[0];
+const featuredBiz = businesses.find((b) => b.data.featured) ?? businesses[0];
+const featuredArticle = articles.find((a) => a.data.featured) ?? articles[0];
 ---
-<BaseLayout title="Sam Mobley" description="Developer. Building small, useful things.">
-  <section class="mb-20">
-    <h1 class="text-3xl font-semibold tracking-tight mb-4">Hi, I'm Sam.</h1>
-    <p class="text-ink-muted text-lg leading-relaxed max-w-xl">
-      I build small, useful software — web tools, iOS apps, and the occasional trading experiment.
-      Most of what I make starts as a personal itch; sometimes they turn into things worth sharing.
-    </p>
-  </section>
-
-  {featured.length > 0 && (
-    <section class="mb-20">
-      <div class="flex items-baseline justify-between mb-6">
-        <h2 class="text-lg font-medium tracking-tight">Featured</h2>
-        <a href="/projects" class="text-sm text-ink-muted hover:text-ink">All projects →</a>
+<BaseLayout
+  title="Sam Mobley — Portfolio"
+  description="A few things I'm working on — apps, websites, and small-business operations."
+  active="home"
+>
+  <main class="home">
+    <section class="home-hero">
+      <div class="wrap">
+        <div class="home-hero-kicker">
+          <span class="dot"></span>
+          <span>Portfolio</span>
+        </div>
+        <h1 class="home-hero-title">
+          A few things I'm <em>working on.</em>
+        </h1>
+        <p class="home-hero-lede">
+          Featured below — one from each corner. Click into any category for the rest.
+        </p>
       </div>
-      <ul class="grid gap-4">
-        {featured.map((project) => (
-          <li>
-            <ProjectCard project={project} />
-          </li>
-        ))}
-      </ul>
     </section>
-  )}
 
-  <section>
-    <h2 class="text-lg font-medium tracking-tight mb-4">Elsewhere</h2>
-    <ul class="space-y-2 text-sm">
-      <li>
-        <a href="https://medium.com/@sammobley" target="_blank" rel="noopener noreferrer" class="text-ink-muted hover:text-ink">
-          Writing on Medium →
-        </a>
-      </li>
-      <li>
-        <a href="https://github.com/sammobley" target="_blank" rel="noopener noreferrer" class="text-ink-muted hover:text-ink">
-          Code on GitHub →
-        </a>
-      </li>
-    </ul>
-  </section>
+    <section class="home-grid-section">
+      <div class="wrap">
+        <div class="home-grid">
+          {/* Featured App */}
+          <a class="home-card" href="/apps">
+            <div class="home-card-kind">
+              <span>01 · App</span>
+              <span class="home-card-more">All apps →</span>
+            </div>
+            {featuredApp && (
+              <>
+                <div class={`home-card-media accent-${featuredApp.data.accent ?? 'neutral'}`}>
+                  <span class="project-media-label">{featuredApp.data.title} — preview</span>
+                </div>
+                <div class="home-card-body">
+                  <div class="home-card-meta">iOS app · 2026</div>
+                  <h3 class="home-card-name">{featuredApp.data.title}</h3>
+                  <p class="home-card-desc">{featuredApp.data.description}</p>
+                </div>
+              </>
+            )}
+          </a>
+
+          {/* Featured Website */}
+          <a class="home-card" href="/websites">
+            <div class="home-card-kind">
+              <span>02 · Website</span>
+              <span class="home-card-more">All sites →</span>
+            </div>
+            {featuredSite && (
+              <>
+                <div class={`home-card-media accent-${featuredSite.data.accent ?? 'neutral'}`}>
+                  <span class="project-media-label">{featuredSite.data.title} — preview</span>
+                </div>
+                <div class="home-card-body">
+                  <div class="home-card-meta">Web app · 2025</div>
+                  <h3 class="home-card-name">{featuredSite.data.title}</h3>
+                  <p class="home-card-desc">{featuredSite.data.description}</p>
+                </div>
+              </>
+            )}
+          </a>
+
+          {/* Featured Business */}
+          <a class="home-card home-card-wide" href="/businesses">
+            <div class="home-card-kind">
+              <span>03 · Business</span>
+              <span class="home-card-more">All businesses →</span>
+            </div>
+            {featuredBiz && (
+              <div class="home-card-biz">
+                <div>
+                  <div class="home-card-meta">{featuredBiz.data.role}</div>
+                  <h3 class="home-card-name" style="font-size: 36px;">{featuredBiz.data.name}</h3>
+                  <p class="home-card-desc">{featuredBiz.data.description}</p>
+                </div>
+                <ul class="home-card-services">
+                  {featuredBiz.data.services.map((s, i) => (
+                    <li>
+                      <span class="svc-n">{String(i + 1).padStart(2, '0')}</span>
+                      <span>{s}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </a>
+
+          {/* Featured Article */}
+          <a class="home-card home-card-wide" href="/articles">
+            <div class="home-card-kind">
+              <span>04 · Article</span>
+              <span class="home-card-more">All articles →</span>
+            </div>
+            {featuredArticle ? (
+              <div class="home-card-article">
+                <div class="home-card-meta">{featuredArticle.data.date}{featuredArticle.data.readTime ? ` · ${featuredArticle.data.readTime}` : ''}</div>
+                <h3 class="home-card-name" style="font-size: 34px;">{featuredArticle.data.title}</h3>
+                <p class="home-card-desc">{featuredArticle.data.excerpt}</p>
+              </div>
+            ) : (
+              <div class="home-card-empty">
+                <div class="home-card-meta">Coming soon</div>
+                <h3 class="home-card-name" style="font-size: 30px;">Writing, in progress.</h3>
+                <p class="home-card-desc">
+                  I'm drafting a few pieces on operations, small-business tooling, and the occasional product note. When the first one is live, it lands here.
+                </p>
+              </div>
+            )}
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
 </BaseLayout>

@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const articles = (await getCollection('articles', ({ data }) => data.published))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout title="Writing — Sam Mobley" description="Notes on operations, small-business tooling, and product work." active="articles">
+  <main class="page">
+    <div class="page-head-v2">
+      <div class="page-head-kicker">
+        <a href="/">← Home</a>
+        <span>· Articles</span>
+      </div>
+      <h1 class="page-head-title">Writing.</h1>
+      <p class="page-head-sub">{articles.length ? `${articles.length} pieces published.` : 'A Medium feed will plug in here.'}</p>
+    </div>
+
+    {articles.length > 0 ? (
+      <div class="article-list">
+        {articles.map((a) => (
+          <a class="article-row" href={a.data.href ?? '#'} target={a.data.href ? '_blank' : undefined} rel={a.data.href ? 'noopener noreferrer' : undefined}>
+            <div class="article-date">{a.data.date}</div>
+            <div>
+              <h3 class="article-title">{a.data.title}</h3>
+              <p class="article-excerpt">{a.data.excerpt}</p>
+            </div>
+            <div class="article-read">{a.data.readTime ?? 'Read →'}</div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="writing-placeholder">
+        <h3>Nothing published yet.</h3>
+        <p>
+          I'm drafting a few pieces on operations, small-business tooling, and the occasional product note. When the first one is live you'll find it here.
+        </p>
+      </div>
+    )}
+  </main>
+</BaseLayout>

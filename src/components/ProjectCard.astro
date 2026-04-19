@@ -6,44 +6,76 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { title, description, tech, status, url, testflight, github, featured } = project.data;
+const {
+  title,
+  description,
+  tech,
+  kind,
+  status,
+  accent = 'neutral',
+  url,
+  testflight,
+  github,
+  featured,
+} = project.data;
 
 const externalUrl = url ?? testflight ?? github;
-const hasLink = featured || !!externalUrl;
 const primaryHref = featured ? `/projects/${project.id}` : externalUrl;
+const hasLink = !!primaryHref;
 const external = !featured && !!externalUrl;
 
 const statusLabel = {
   live: 'Live',
-  testflight: 'TestFlight',
+  testflight: 'Live on TestFlight',
   internal: 'Internal',
-  dev: 'In Development',
+  dev: 'In development',
 }[status];
 
+const kindLabel = kind === 'website' ? 'Web app' : 'iOS app';
+const year = new Date().getFullYear();
+
+const links = [
+  url && { label: 'Visit site →', href: url, external: true },
+  testflight && { label: 'TestFlight →', href: testflight, external: true },
+  github && { label: 'GitHub →', href: github, external: true },
+  featured && !url && !testflight && { label: 'Details →', href: `/projects/${project.id}`, external: false },
+].filter(Boolean) as { label: string; href: string; external: boolean }[];
+
 const Tag = hasLink ? 'a' : 'div';
-const cardClass = [
-  'block border border-paper-border rounded-md px-5 py-5 bg-paper-raised transition-colors group',
-  hasLink ? 'hover:border-ink' : 'opacity-80',
-].join(' ');
 ---
-<Tag
-  href={hasLink ? primaryHref : undefined}
-  target={external ? '_blank' : undefined}
-  rel={external ? 'noopener noreferrer' : undefined}
-  class={cardClass}
->
-  <div class="flex items-baseline justify-between gap-4">
-    <h3 class={`text-base font-medium tracking-tight transition-colors ${hasLink ? 'group-hover:text-accent' : ''}`}>
-      {title}
-    </h3>
-    <span class="text-xs font-mono text-ink-subtle whitespace-nowrap">{statusLabel}</span>
+<article class="project">
+  <Tag
+    href={hasLink ? primaryHref : undefined}
+    target={external ? '_blank' : undefined}
+    rel={external ? 'noopener noreferrer' : undefined}
+    class={`project-media accent-${accent}`}
+    aria-label={`${title} — open`}
+  >
+    <span class="project-media-label">{title} — screenshot</span>
+  </Tag>
+  <div class="project-body">
+    <div class="project-meta-row">
+      <span>{kindLabel} · {year}</span>
+      <span class={`status-pill ${status === 'live' || status === 'testflight' ? 'live' : ''}`}>
+        <span class="dot"></span>
+        {statusLabel}
+      </span>
+    </div>
+    <h3 class="project-name">{title}</h3>
+    <p class="project-desc">{description}</p>
+    {tech.length > 0 && (
+      <div class="project-tags">
+        {tech.map((t) => <span class="tag">{t}</span>)}
+      </div>
+    )}
+    {links.length > 0 && (
+      <div class="project-links">
+        {links.map((l) => (
+          <a href={l.href} target={l.external ? '_blank' : undefined} rel={l.external ? 'noopener noreferrer' : undefined}>
+            {l.label}
+          </a>
+        ))}
+      </div>
+    )}
   </div>
-  <p class="mt-2 text-sm text-ink-muted leading-relaxed">{description}</p>
-  {tech.length > 0 && (
-    <ul class="mt-4 flex flex-wrap gap-2">
-      {tech.map((t) => (
-        <li class="text-xs font-mono text-ink-subtle">{t}</li>
-      ))}
-    </ul>
-  )}
-</Tag>
+</article>

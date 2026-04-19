@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const businesses = (await getCollection('businesses', ({ data }) => data.published))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout title="Businesses — Sam Mobley" description="Where most of my hours actually go." active="businesses">
+  <main class="page">
+    <div class="page-head-v2">
+      <div class="page-head-kicker">
+        <a href="/">← Home</a>
+        <span>· Businesses</span>
+      </div>
+      <h1 class="page-head-title">Businesses.</h1>
+      <p class="page-head-sub">Where most of my hours actually go.</p>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+      {businesses.map((b) => (
+        <div class="business">
+          <div>
+            <h3 class="business-name">{b.data.name}</h3>
+            <div class="business-role">{b.data.role}</div>
+            <p class="business-desc">{b.data.description}</p>
+            <a class="business-cta" href={b.data.link.href}>{b.data.link.label}</a>
+          </div>
+          <div class="services">
+            {b.data.services.map((s, i) => (
+              <div class="service-row">
+                <span>{s}</span>
+                <span class="n">{String(i + 1).padStart(2, '0')}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </main>
+</BaseLayout>

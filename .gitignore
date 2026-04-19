@@ -21,3 +21,6 @@ npm-debug.log*
 
 # Cache
 .cache/
+
+# Playwright / screenshot scratch
+.playwright-mcp/
